@@ -1,0 +1,42 @@
+.blue-btn {
+    background: #1C95F9;
+    box-shadow: 5px 5px 15px rgba(0,0,0,0.3);
+}
+
+nav {
+    box-shadow: 0px 0px 0px rgba(0,0,0,0);
+}
+
+#forms-parent {
+    margin-top: 7%;
+}
+
+#login-parent {
+    min-height: 300px;
+}
+
+#login-card {
+    position: absolute;
+    height: 400px;
+    background-color: white;
+    box-shadow: 0px 0px 50px rgba(0,0,0,0.3);
+    z-index: 999;
+}
+#signup-card {
+    position: absolute;
+    top: 35px;
+    left: 190px;
+    height: 320px;
+    background-color: white;
+    box-shadow: 0px 0px 50px rgba(0,0,0,0.3);
+}
+.login-input {
+    width: 100%;
+    background-color: rgb(224, 224, 224);
+    border: none;
+    outline: none;
+    padding-left: 20px;
+    margin-top: 15px;
+    font-size: 0.8em;
+
+}
