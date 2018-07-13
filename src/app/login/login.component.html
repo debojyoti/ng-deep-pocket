@@ -17,24 +17,40 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-md-7">
-      &nbsp;
+      <div class="row justify-content-center" style="padding-top: 20%" >
+        <div class="col-md-6" style="text-align: center">
+          <img src="../../assets/img/login-page-into.png" alt="">
+          <h3 style="font-weight: 500">Track | Manage | Predict</h3>
+        </div>
+      </div>
     </div>
     <div class="col-md-5" id="forms-parent">
       <div class="container-fluid" id="login-parent">
         <div class="row" style="position: relative;">
-          <div class="col-lg-7" id="login-card">
+          <div class="col-lg-7 col-10" id="login-card"  [@myAnimation]="loginState" (click)="toggle('login')">
             <div class="row justify-content-center">
               <div class="col-6">
-                <img src="../../assets/img/login-icon.png" class="img img-fluid" style="margin-top: 60px">
+                <img src="../../assets/img/login-icon.png" class="img img-fluid" style="margin-top: 48%">
               </div>
-              <div class="col-12 mt-5">
-                <input type="text" class="login-input" placeholder="Email">
+              <div class="col-12" style="text-align: center;margin-top: 15%">
+                <input type="text" class="login-input" placeholder="Email" [(ngModel)]="loginEmail">
                 <input type="password" class="login-input" placeholder="Password">
+                <button type="button" class="btn blue-btn login-button" style="margin-top: 10%">Login</button>
+                <h6 style="color:red;margin-top: 8%; font-size: 0.6em">Wrong Credentials</h6>
               </div>
             </div>
           </div>
-          <div class="col-lg-5" id="signup-card">
-
+          <div class="col-lg-7 col-10" id="signup-card"  [@myAnimation]="signupState" (click)="toggle('signup')" >
+            <div class="row justify-content-center">
+              <div class="col-6">
+                <img src="../../assets/img/signup-icon.png" class="img img-fluid" style="margin-top: 40%">
+              </div>
+              <div class="col-12 mt-5" style="text-align: center">
+                <input type="text" class="login-input" placeholder="Email" [(ngModel)]="signupEmail">
+                <button type="button" class="btn blue-btn login-button"  style="margin-top: 15%">Get Started</button>
+                <h6 style="color:red;margin-top: 8%; font-size: 0.6em">Input Valid Email</h6>
+              </div>
+            </div>
           </div>
         </div>
       </div>
