@@ -1,0 +1,98 @@
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-4 col-md-6 col-sm-6">
+        <!-- <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title"> Add a savings account</h5>
+            <mat-form-field>
+              <mat-select placeholder="Type" [(ngModel)]="newAccType" [ngModelOptions]="{standalone:true}">
+                <mat-option value="option">Bank</mat-option>
+                <mat-option value="option">Home</mat-option>
+                <mat-option value="option">Fixed Deposit</mat-option>
+                <mat-option value="option">Life Insurance</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              </mat-form-field>
+            <button type="button" class="btn btn-success" [attr.disabled]="true">Add</button>
+          </div>
+        </div> -->
+        <div style="text-align: center;cursor: pointer;" (click)="openVerticallyCentered(content)">
+          <i class="material-icons" style="font-size: 5em;color:rgb(145, 209, 49)">add</i>
+          <h2>Add an account</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">Add an account</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-12">
+          <mat-form-field>
+            <mat-select placeholder="Type" [(ngModel)]="newAccType" [ngModelOptions]="{standalone:true}">
+              <mat-option value="bank">Bank</mat-option>
+              <mat-option value="homecash">Home Cash</mat-option>
+              <mat-option value="fd">Fixed Deposit</mat-option>
+              <mat-option value="li">Life Insurance</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <input matInput placeholder="Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+          </mat-form-field>
+          <div *ngIf="newAccType=='bank'">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Account Number" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Starting Balance" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+          </div>
+          <div *ngIf="newAccType=='fd'">
+            <mat-form-field>
+              <input matInput [matDatepicker]="myDatepicker">
+              <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #myDatepicker></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Matuarity Amount" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+          </div>
+          <div *ngIf="newAccType=='li'">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Company" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Policy No" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Holder's Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              </mat-form-field>
+            <mat-form-field>
+              <input matInput [matDatepicker]="myDatepicker" disabled placeholder="Date of Matuarity">
+              <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
+              <mat-datepicker #myDatepicker disabled="false"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Matuarity Amount" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+          </div>
+          <button type="button" class="btn btn-success" [attr.disabled]="true">Add</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <!-- <button type="button" class="btn btn-light" (click)="c('Close click')">Close</button> -->
+  </div>
+</ng-template>
