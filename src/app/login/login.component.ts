@@ -35,10 +35,15 @@ import {
   ]
 })
 export class LoginComponent implements OnInit {
-  loginState;
-  signupState;
+
   @Input() loginEmail;
+  @Input() password = "";
   @Input() signupEmail;
+
+  public loginState;
+  public signupState;
+  public errorMsg = "";
+
   constructor() { }
 
   ngOnInit() {
@@ -55,15 +60,40 @@ export class LoginComponent implements OnInit {
       if (this.loginState == "goBack") {
         this.loginState = "goFront";
         this.signupState = "goBack";
-        this.loginEmail = this.signupEmail;
       }
     } else if (card == "signup") {
       if (this.signupState == "goBack") {
         this.loginState = "goBack";
         this.signupState = "goFront";
-        this.signupEmail = "";
       }
     }
+  }
+
+  public login() {
+    if (this.validateEmail()) {
+      if (this.validatePassword()) {
+        return true;
+      }
+    }
+  }
+
+  private validateEmail() {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (re.test(String(this.loginEmail).toLowerCase())) {
+      this.errorMsg = "";
+      return true;
+    }
+    this.errorMsg = "Invalid Email";
+    return false;
+  }
+
+  private validatePassword() {
+    if (this.password.length < 6) {
+      this.errorMsg = "Invalid Password";
+      return false;
+    } 
+    this.errorMsg = "";
+    return true;
   }
 
 }

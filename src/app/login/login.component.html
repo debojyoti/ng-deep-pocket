@@ -34,9 +34,9 @@
               </div>
               <div class="col-12" style="text-align: center;margin-top: 15%">
                 <input type="text" class="login-input" placeholder="Email" [(ngModel)]="loginEmail">
-                <input type="password" class="login-input" placeholder="Password">
-                <button type="button" class="btn blue-btn login-button" style="margin-top: 10%">Login</button>
-                <h6 style="color:red;margin-top: 8%; font-size: 0.6em">Wrong Credentials</h6>
+                <input type="password" class="login-input" placeholder="Password" [(ngModel)]="password">
+                <button type="button" class="btn blue-btn login-button" style="margin-top: 10%" (click)="login()">Login</button>
+                <h6 style="color:red;margin-top: 8%; font-size: 0.6em" *ngIf="errorMsg!=''">{{ errorMsg }}</h6>
               </div>
             </div>
           </div>
