@@ -6,6 +6,8 @@ import {
   animate,
   transition
 } from '@angular/animations';
+import { Router } from '@angular/router';
+import { ConnectorService } from '../connector.service';
 
 @Component({
   selector: 'app-login',
@@ -44,9 +46,18 @@ export class LoginComponent implements OnInit {
   public signupState;
   public errorMsg = "";
 
-  constructor() { }
+  constructor(
+    private router: Router,
+    private connector : ConnectorService
+  ) { }
 
   ngOnInit() {
+    this.router.navigate(["/dashboard"]);
+    // First check if token is present
+    if (!!localStorage.getItem("auth")) {
+     // this.router.navigate(["/dashboard"]);
+   }
+
     this.loginState = "goBack";
     this.signupState = "goFront";
     setTimeout(() => {
@@ -72,7 +83,15 @@ export class LoginComponent implements OnInit {
   public login() {
     if (this.validateEmail()) {
       if (this.validatePassword()) {
-        return true;
+        let loginParams = {
+          email : this.loginEmail,
+          password : this.password
+        }
+        this.connector.getRequest("http://localhost/index.php", loginParams).subscribe(res => {
+          if (res["auth"] !== undefined) {
+            this.router.navigate(["/dashboard"]);
+          }
+        });
       }
     }
   }

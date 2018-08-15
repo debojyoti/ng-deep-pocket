@@ -4,29 +4,20 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
 
 import { AppRoutingModule } from './app.routing';
 import { ComponentsModule } from './components/components.module';
-
 import { AppComponent } from './app.component';
 
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-
-
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { UserProfileComponent } from './user-profile/user-profile.component';
-import { TableListComponent } from './table-list/table-list.component';
-import { TypographyComponent } from './typography/typography.component';
-import { IconsComponent } from './icons/icons.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { UpgradeComponent } from './upgrade/upgrade.component';
 import {
   AgmCoreModule
 } from '@agm/core';
 
 import { AdminLayoutComponent } from './layouts/admin-layout/admin-layout.component';
 import { LoginComponent } from './login/login.component';
+import { TokenInterceptorService } from './token-interceptor.service';
 
 @NgModule({
   imports: [
@@ -37,6 +28,7 @@ import { LoginComponent } from './login/login.component';
     RouterModule,
     MatAutocompleteModule,
     AppRoutingModule,
+    HttpClientModule,
     NgbModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: 'YOUR_GOOGLE_MAPS_API_KEY'
@@ -48,7 +40,14 @@ import { LoginComponent } from './login/login.component';
     LoginComponent,
 
   ],
-  providers: [],
+  providers: [
+    TokenInterceptorService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass:TokenInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
