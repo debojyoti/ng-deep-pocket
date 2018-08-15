@@ -8,10 +8,10 @@ import { Observable } from 'rxjs';
 export class ConnectorService {
 
   constructor(
-    private http : HttpClient
+    private http: HttpClient
   ) { }
 
-  public getRequest(url, params = null) : Observable<any> {
+  public getRequest(url, params = null): Observable<any> {
     let res = this.http.get(
       url,
       {
@@ -24,11 +24,11 @@ export class ConnectorService {
     return res;
   }
 
-  public postRequest(url, params) : Observable<any> {
+  public postRequest(url, params): Observable<any> {
     let res = this.http.post(
       url,
       {
-        params : params
+        params: params
       }
     );
 
@@ -43,7 +43,7 @@ export class ConnectorService {
         localStorage.setItem("auth", data["auth"]);
       }
     });
-    
+
   }
 
 }
