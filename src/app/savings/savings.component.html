@@ -52,42 +52,49 @@
           </mat-form-field>
           <div *ngIf="newAccType=='bank'">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Account Number" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              <input matInput placeholder="Account Number" [(ngModel)]="newAccNo" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Starting Balance" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              <input matInput placeholder="Starting Balance" [(ngModel)]="newAccBal" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
           </div>
           <div *ngIf="newAccType=='fd'">
             <mat-form-field>
-              <input matInput [matDatepicker]="myDatepicker">
+              <input matInput [matDatepicker]="myDatepicker" [(ngModel)]="newFdMdate" [ngModelOptions]="{standalone:true}">
               <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #myDatepicker></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Matuarity Amount" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              <input matInput placeholder="Matuarity Amount" [(ngModel)]="newFdMamount" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
           </div>
           <div *ngIf="newAccType=='li'">
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Company" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              <input matInput placeholder="Company" [(ngModel)]="newLiCompany" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Policy No" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              <input matInput placeholder="Policy No" [(ngModel)]="newLiPno" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-                <input matInput placeholder="Holder's Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+                <input matInput placeholder="Holder's Name" [(ngModel)]="newLiHname" [ngModelOptions]="{standalone:true}">
               </mat-form-field>
             <mat-form-field>
-              <input matInput [matDatepicker]="myDatepicker" disabled placeholder="Date of Matuarity">
+              <input matInput [matDatepicker]="myDatepicker" disabled placeholder="Date of Matuarity" [(ngModel)]="newLiMdate" [ngModelOptions]="{standalone:true}">
               <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
               <mat-datepicker #myDatepicker disabled="false"></mat-datepicker>
             </mat-form-field>
             <mat-form-field class="example-full-width">
-              <input matInput placeholder="Matuarity Amount" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
+              <input matInput placeholder="Matuarity Amount" [(ngModel)]="newLiMamount" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Premium Amount" [(ngModel)]="newLiPamount" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Premium Months" [(ngModel)]="newLiPmonths" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
           </div>
-          <button type="button" class="btn btn-success" [attr.disabled]="true">Add</button>
+          <button type="button" class="btn btn-success"  (click)="add()">Add</button>
+          <div id="formError">{{ formError }}</div>
         </div>
       </div>
     </div>
