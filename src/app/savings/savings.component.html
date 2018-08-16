@@ -1,24 +1,70 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-4 col-md-6 col-sm-6">
-        <!-- <div class="card" style="width: 18rem;">
-          <div class="card-body">
-            <h5 class="card-title"> Add a savings account</h5>
-            <mat-form-field>
-              <mat-select placeholder="Type" [(ngModel)]="newAccType" [ngModelOptions]="{standalone:true}">
-                <mat-option value="option">Bank</mat-option>
-                <mat-option value="option">Home</mat-option>
-                <mat-option value="option">Fixed Deposit</mat-option>
-                <mat-option value="option">Life Insurance</mat-option>
-              </mat-select>
-            </mat-form-field>
-            <mat-form-field class="example-full-width">
-                <input matInput placeholder="Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
-              </mat-form-field>
-            <button type="button" class="btn btn-success" [attr.disabled]="true">Add</button>
+      <div class="col-md-4">
+        <div class="card card-profile">
+          <div class="card-avatar">
+            <a href="#pablo">
+              <img class="img" src="../../assets/img/bank-icon.png">
+            </a>
           </div>
-        </div> -->
+          <div class="card-body">
+            <h4 class="card-title">Axis Bank</h4>
+            <h6 class="card-category text-gray">Debojyoti Saha</h6>
+            <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
+            <div class="row" style="margin-bottom: 3%">
+              <div class="col-12">
+                  <h4 class="card-title">Current Balance : 12000</h4>
+              </div>
+            </div>
+            <a class="btn btn-success btn-round"
+              href="#pablo">Statements</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+          <div class="card card-profile">
+            <div class="card-avatar">
+              <a href="#pablo">
+                <img class="img" src="../../assets/img/bank-icon.png">
+              </a>
+            </div>
+            <div class="card-body">
+              <h4 class="card-title">Axis Bank</h4>
+              <h6 class="card-category text-gray">Debojyoti Saha</h6>
+              <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
+              <div class="row" style="margin-bottom: 3%">
+                <div class="col-12">
+                    <h4 class="card-title">Current Balance : 12000</h4>
+                </div>
+              </div>
+              <a class="btn btn-success btn-round"
+                href="#pablo">Statements</a>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card card-profile">
+              <div class="card-avatar">
+                <a href="#pablo">
+                  <img class="img" src="../../assets/img/bank-icon.png">
+                </a>
+              </div>
+              <div class="card-body">
+                <h4 class="card-title">Axis Bank</h4>
+                <h6 class="card-category text-gray">Debojyoti Saha</h6>
+                <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
+                <div class="row" style="margin-bottom: 3%">
+                  <div class="col-12">
+                      <h4 class="card-title">Current Balance : 12000</h4>
+                  </div>
+                </div>
+                <a class="btn btn-success btn-round"
+                  href="#pablo">Statements</a>
+              </div>
+            </div>
+          </div>
+      <div class="col-lg-4 col-md-6 col-sm-6" style="padding-top: 10%">
         <div style="text-align: center;cursor: pointer;" (click)="openVerticallyCentered(content)">
           <i class="material-icons" style="font-size: 5em;color:rgb(145, 209, 49)">add</i>
           <h2>Add an account</h2>
@@ -47,13 +93,18 @@
               <mat-option value="li">Life Insurance</mat-option>
             </mat-select>
           </mat-form-field>
-          <mat-form-field class="example-full-width">
+          <mat-form-field class="example-full-width" *ngIf="newAccType !== undefined">
             <input matInput placeholder="Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
           </mat-form-field>
           <div *ngIf="newAccType=='bank'">
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Account Number" [(ngModel)]="newAccNo" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Starting Balance" [(ngModel)]="newAccBal" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
+          </div>
+          <div *ngIf="newAccType=='homecash'">
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Starting Balance" [(ngModel)]="newAccBal" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
@@ -76,8 +127,8 @@
               <input matInput placeholder="Policy No" [(ngModel)]="newLiPno" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
             <mat-form-field class="example-full-width">
-                <input matInput placeholder="Holder's Name" [(ngModel)]="newLiHname" [ngModelOptions]="{standalone:true}">
-              </mat-form-field>
+              <input matInput placeholder="Holder's Name" [(ngModel)]="newLiHname" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
             <mat-form-field>
               <input matInput [matDatepicker]="myDatepicker" disabled placeholder="Date of Matuarity" [(ngModel)]="newLiMdate" [ngModelOptions]="{standalone:true}">
               <mat-datepicker-toggle matSuffix [for]="myDatepicker"></mat-datepicker-toggle>
@@ -93,7 +144,7 @@
               <input matInput placeholder="Premium Months" [(ngModel)]="newLiPmonths" [ngModelOptions]="{standalone:true}">
             </mat-form-field>
           </div>
-          <button type="button" class="btn btn-success"  (click)="add()">Add</button>
+          <button type="button" class="btn btn-success" (click)="add()">Add</button>
           <div id="formError">{{ formError }}</div>
         </div>
       </div>
