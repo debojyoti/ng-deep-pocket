@@ -87,9 +87,13 @@ export class LoginComponent implements OnInit {
           email : this.loginEmail,
           password : this.password
         }
-        this.connector.getRequest("http://localhost/index.php", loginParams).subscribe(res => {
-          if (res["auth"] !== undefined) {
+        console.log("ff");
+        this.connector.postRequest("http://localhost/private/api/login.php", loginParams).subscribe(res => {
+          if (!!localStorage.getItem("auth")) {
             this.router.navigate(["/dashboard"]);
+          } else {
+            // No matching accounts
+            alert("No matching accounts!");
           }
         });
       }

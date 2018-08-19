@@ -33,8 +33,8 @@
                 <img src="../../assets/img/login-icon.png" class="img img-fluid" style="margin-top: 48%">
               </div>
               <div class="col-12" style="text-align: center;margin-top: 15%">
-                <input type="text" class="login-input" placeholder="Email" [(ngModel)]="loginEmail">
-                <input type="password" class="login-input" placeholder="Password" [(ngModel)]="password">
+                <input type="email" name="email" class="login-input" placeholder="Email" [(ngModel)]="loginEmail">
+                <input type="password" name="password" class="login-input" placeholder="Password" [(ngModel)]="password">
                 <button type="button" class="btn blue-btn login-button" style="margin-top: 10%" (click)="login()">Login</button>
                 <h6 style="color:red;margin-top: 8%; font-size: 0.6em" *ngIf="errorMsg!=''">{{ errorMsg }}</h6>
               </div>

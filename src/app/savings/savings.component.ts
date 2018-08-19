@@ -2,6 +2,7 @@ import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { Account } from '../classes/account';
+import { ConnectorService } from '../connector.service';
 
 
 @Component({
@@ -30,7 +31,8 @@ export class SavingsComponent implements OnInit {
   public formError;
 
   constructor(
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private connector: ConnectorService
   ) { }
 
   ngOnInit() {
@@ -54,6 +56,10 @@ export class SavingsComponent implements OnInit {
             balance : this.newAccBal
           }
           console.log(params);
+          this.connector.postRequest(
+            "http://localhost/private/api/accounts.php",
+            params
+          );
           break;
         
         case "homecash":

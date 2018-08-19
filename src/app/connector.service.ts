@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -25,11 +25,14 @@ export class ConnectorService {
   }
 
   public postRequest(url, params): Observable<any> {
+    // Process params
+    let body = new HttpParams();
+    for (let param in params) {
+      body = body.set(param,params[param]);
+    }
     let res = this.http.post(
       url,
-      {
-        params: params
-      }
+      body
     );
 
     this.updateToken(res);
@@ -39,8 +42,10 @@ export class ConnectorService {
 
   private updateToken(res) {
     res.subscribe(data => {
-      if (data["auth"] !== undefined) {
-        localStorage.setItem("auth", data["auth"]);
+      if (data !== null && data !== undefined) {
+        if (data["jwt"] !== undefined) {
+          localStorage.setItem("auth", data["jwt"]);
+        }
       }
     });
 
