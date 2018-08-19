@@ -1,4 +1,29 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding-left: 80px;">
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-8" id="section-1-wrapper">
+      k
+    </div>
+    <div class="col-lg-4" id="section-2-wrapper">
+      <div class="row justify-content-center">
+        <div class="col-11" id="login-wrapper">
+          <div class="input-box">
+            <input type="email" class="pass-input" placeholder="Email" [(ngModel)]="loginEmail">
+          </div>
+          <div class="input-box">
+            <input type="password" class="pass-input" placeholder="Password" [(ngModel)]="password">
+          </div>
+          <button class="btn" type="button" (click)="login()">Login</button>
+          <h6 style="color:red;margin-top: 8%; font-size: 0.6em" *ngIf="errorMsg!=''">{{ errorMsg }}</h6>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light" style="padding-left: 80px;">
   <div>
     <img src="../../assets/img/deep-pocket-icon-200x200.png" class="img img-fluid" style="height: 60px">
   <h4 style="font-weight: 600;margin-top: 10px;display: inline;">Deep Pocket</h4>
@@ -57,4 +82,4 @@
     </div>
   </div>
 
-</div>
+</div> -->
