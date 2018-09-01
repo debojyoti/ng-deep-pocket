@@ -15,12 +15,11 @@ export class TokenInterceptorService implements HttpInterceptor {
     if (authToken !== undefined) {
       let tokenizedReq = req.clone({
         setHeaders : {
-          Authorization : "Bearer "+authToken
+          Authorization : "Bearer "+window.btoa(authToken+':')
         }
       });
       return next.handle(tokenizedReq);
     }
-    
     return next.handle(req);
   }
 }

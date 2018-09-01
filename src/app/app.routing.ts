@@ -28,13 +28,13 @@ const routes: Routes = [
         path: 'dashboard',
         component: DashboardComponent
       },
-      { path: 'dashboard', component: DashboardComponent },
-      { path: 'user-profile', component: UserProfileComponent },
-      { path: 'table-list', component: TableListComponent },
-      { path: 'typography', component: TypographyComponent },
-      { path: 'icons', component: IconsComponent },
-      { path: 'notifications', component: NotificationsComponent },
-      { path: 'savings', component: SavingsComponent },
+      { path: 'dashboard', component: DashboardComponent, canActivate: [AuthGuard] },
+      { path: 'user-profile', component: UserProfileComponent, canActivate: [AuthGuard] },
+      { path: 'table-list', component: TableListComponent, canActivate: [AuthGuard] },
+      { path: 'typography', component: TypographyComponent, canActivate: [AuthGuard] },
+      { path: 'icons', component: IconsComponent, canActivate: [AuthGuard] },
+      { path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
+      { path: 'savings', component: SavingsComponent, canActivate: [AuthGuard] },
     ],
     canActivate: [AuthGuard]
   }

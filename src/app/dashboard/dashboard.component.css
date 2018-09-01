@@ -1,0 +1,22 @@
+input {
+    color : grey!important;
+}
+
+#transaction-card {
+    padding: 4% 0%;
+    padding-top: 10%;
+}
+
+#transaction-header {
+    margin-bottom: 6%;
+}
+
+
+button {
+    width: 100%;
+}
+
+#trans-error-msg {
+    color: red;
+    padding-left: 1%;
+}

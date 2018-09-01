@@ -1,6 +1,62 @@
 <div class="main-content">
   <div class="container-fluid">
     <div class="row">
+      <div class="col-md-4" *ngFor="let bank of banks">
+        <div class="card card-profile">
+          <div class="card-avatar">
+            <img class="img" src="../../assets/img/bank-icon.png">
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">{{ bank.name }}</h4>
+            <h6 class="card-category text-gray">{{ bank.holder_name }}</h6>
+            <h6 class="card-category text-gray">A/C No : {{ bank.acc_no }}</h6>
+            <div class="row" style="margin-bottom: 3%">
+              <div class="col-12">
+                <h4 class="card-title">Current Balance : {{ bank.current_balance }}</h4>
+              </div>
+            </div>
+            <a class="btn btn-success btn-round" href="#pablo">Statements</a>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4" *ngFor="let hc of homeCash">
+        <div class="card card-profile">
+          <div class="card-avatar">
+            <img class="img" src="../../assets/img/189715.png">
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">{{ hc.name }}</h4>
+            <h6 class="card-category text-gray">&nbsp;</h6>
+            <h6 class="card-category text-gray">&nbsp;</h6>
+            <div class="row" style="margin-bottom: 3%">
+              <div class="col-12">
+                <h4 class="card-title">Current Balance : {{ hc.current_balance }}</h4>
+              </div>
+            </div>
+            <a class="btn btn-success btn-round" href="#pablo">Statements</a>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="col-md-4">
+        <div class="card card-profile">
+          <div class="card-avatar">
+            <a href="#pablo">
+              <img class="img" src="../../assets/img/bank-icon.png">
+            </a>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">Axis Bank</h4>
+            <h6 class="card-category text-gray">Debojyoti Saha</h6>
+            <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
+            <div class="row" style="margin-bottom: 3%">
+              <div class="col-12">
+                <h4 class="card-title">Current Balance : 12000</h4>
+              </div>
+            </div>
+            <a class="btn btn-success btn-round" href="#pablo">Statements</a>
+          </div>
+        </div>
+      </div>
       <div class="col-md-4">
         <div class="card card-profile">
           <div class="card-avatar">
@@ -14,56 +70,13 @@
             <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
             <div class="row" style="margin-bottom: 3%">
               <div class="col-12">
-                  <h4 class="card-title">Current Balance : 12000</h4>
+                <h4 class="card-title">Current Balance : 12000</h4>
               </div>
             </div>
-            <a class="btn btn-success btn-round"
-              href="#pablo">Statements</a>
+            <a class="btn btn-success btn-round" href="#pablo">Statements</a>
           </div>
         </div>
-      </div>
-      <div class="col-md-4">
-          <div class="card card-profile">
-            <div class="card-avatar">
-              <a href="#pablo">
-                <img class="img" src="../../assets/img/bank-icon.png">
-              </a>
-            </div>
-            <div class="card-body">
-              <h4 class="card-title">Axis Bank</h4>
-              <h6 class="card-category text-gray">Debojyoti Saha</h6>
-              <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
-              <div class="row" style="margin-bottom: 3%">
-                <div class="col-12">
-                    <h4 class="card-title">Current Balance : 12000</h4>
-                </div>
-              </div>
-              <a class="btn btn-success btn-round"
-                href="#pablo">Statements</a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card card-profile">
-              <div class="card-avatar">
-                <a href="#pablo">
-                  <img class="img" src="../../assets/img/bank-icon.png">
-                </a>
-              </div>
-              <div class="card-body">
-                <h4 class="card-title">Axis Bank</h4>
-                <h6 class="card-category text-gray">Debojyoti Saha</h6>
-                <h6 class="card-category text-gray">A/C No : 1234567890321</h6>
-                <div class="row" style="margin-bottom: 3%">
-                  <div class="col-12">
-                      <h4 class="card-title">Current Balance : 12000</h4>
-                  </div>
-                </div>
-                <a class="btn btn-success btn-round"
-                  href="#pablo">Statements</a>
-              </div>
-            </div>
-          </div>
+      </div> -->
       <div class="col-lg-4 col-md-6 col-sm-6" style="padding-top: 10%">
         <div style="text-align: center;cursor: pointer;" (click)="openVerticallyCentered(content)">
           <i class="material-icons" style="font-size: 5em;color:rgb(145, 209, 49)">add</i>
@@ -97,6 +110,9 @@
             <input matInput placeholder="Name" [(ngModel)]="newAccName" [ngModelOptions]="{standalone:true}">
           </mat-form-field>
           <div *ngIf="newAccType=='bank'">
+            <mat-form-field class="example-full-width">
+              <input matInput placeholder="Holder Name" [(ngModel)]="newAccHname" [ngModelOptions]="{standalone:true}">
+            </mat-form-field>
             <mat-form-field class="example-full-width">
               <input matInput placeholder="Account Number" [(ngModel)]="newAccNo" [ngModelOptions]="{standalone:true}">
             </mat-form-field>

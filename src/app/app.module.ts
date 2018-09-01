@@ -31,6 +31,7 @@ import { NotificationsComponent } from './notifications/notifications.component'
 import { UpgradeComponent } from './upgrade/upgrade.component';
 import { SavingsComponent } from './savings/savings.component';
 import { ProfileComponent } from './profile/profile.component';
+import { SharedDataService } from './shared-data.service';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { ProfileComponent } from './profile/profile.component';
       provide: HTTP_INTERCEPTORS,
       useClass:TokenInterceptorService,
       multi: true
-    }
+    },
+    SharedDataService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, Input, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import {NgbModal, NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
 import { Account } from '../classes/account';
 import { ConnectorService } from '../connector.service';
+import { SharedDataService } from '../shared-data.service';
 
 
 @Component({
@@ -11,11 +12,12 @@ import { ConnectorService } from '../connector.service';
   encapsulation: ViewEncapsulation.None,
   styleUrls: ['./savings.component.scss']
 })
-export class SavingsComponent implements OnInit {
+export class SavingsComponent implements OnInit, OnDestroy {
 
   /*  Properties for new account */
   @Input() newAccType;
   @Input() newAccName;
+  @Input() newAccHname;
   @Input() newAccNo;
   @Input() newAccBal;
   @Input() newFdMdate;
@@ -29,17 +31,55 @@ export class SavingsComponent implements OnInit {
   @Input() newLiPmonths;
 
   public formError;
+  public banks;
+  public homeCash;
+
+  private subscription;
 
   constructor(
     private modalService: NgbModal,
-    private connector: ConnectorService
+    private connector: ConnectorService,
+    private sharedData: SharedDataService
   ) { }
 
   ngOnInit() {
+    this.subscription = this.sharedData.getAccounts().subscribe(res => {
+      if (res !== undefined && res !== null) {
+        if (res["banks"] !== undefined) {
+          this.processBanks(res["banks"]);
+        }
+        if (res["homecash"] !== undefined) {
+          this.processHomeCash(res["homecash"]);
+        }
+      }
+    });
+    this.sharedData.fetchAccounts();
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   openVerticallyCentered(content) {
     this.modalService.open(content, { centered: true, size: 'lg' });
+  }
+
+  public processBanks(data) {
+    this.banks = [];
+    data.forEach(bank => {
+      // bank["current_balance"] = Number(bank["current_balance"].toFixed(1)).toLocaleString();
+      bank["current_balance"] = bank["current_balance"].toLocaleString('en-US', { style: 'currency', currency: 'INR' });
+      this.banks.push(bank);
+    });
+  }
+
+  public processHomeCash(data) {
+    this.homeCash = [];
+    data.forEach(hC => {
+      hC["current_balance"] = hC["current_balance"].toLocaleString('en-US', { style: 'currency', currency: 'INR' });
+      // hC["current_balance"] = Number(hC["current_balance"].toFixed(1)).toLocaleString();
+      this.homeCash.push(hC);
+    });
   }
 
   add() {
@@ -52,14 +92,25 @@ export class SavingsComponent implements OnInit {
             action : "add",
             type : "bank",
             name : this.newAccName,
+            hname : this.newAccHname,
             accNumber : this.newAccNo,
             balance : this.newAccBal
           }
           console.log(params);
           this.connector.postRequest(
-            "http://localhost/private/api/accounts.php",
+            "http://"+window["IP"]+"/private/api/accounts.php",
             params
-          );
+          ).subscribe(res => {
+            if (res !== undefined && res !== null) {
+              this.connector.updateToken(res);
+              if (res["banks"] !== undefined) {
+                this.processBanks(res["banks"]);
+              }
+              if (res["homecash"] !== undefined) {
+                this.processHomeCash(res["homecash"]);
+              }
+            }
+          });
           break;
         
         case "homecash":
@@ -70,6 +121,19 @@ export class SavingsComponent implements OnInit {
             balance : this.newAccBal
           }
           console.log(params);
+          this.connector.postRequest(
+            "http://"+window["IP"]+"/private/api/accounts.php",
+            params
+          ).subscribe(res => {
+            if (res !== undefined && res !== null) {
+              if (res["banks"] !== undefined) {
+                this.processBanks(res["banks"]);
+              }
+              if (res["homecash"] !== undefined) {
+                this.processHomeCash(res["homecash"]);
+              }
+            }
+          });
           break;
 
         case "fd":
@@ -170,5 +234,7 @@ export class SavingsComponent implements OnInit {
     }
     
   }
+
+
 
 }

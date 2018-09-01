@@ -1,7 +1,11 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, Input } from '@angular/core';
 import * as Chartist from 'chartist';
 import { FormControl } from '@angular/forms';
 import { MatAutocomplete } from '@angular/material';
+import { SharedDataService } from '../shared-data.service';
+import { ConnectorService } from '../connector.service';
+declare var $: any;
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,143 +17,161 @@ export class DashboardComponent implements OnInit {
   options: string[] = ['One', 'Two', 'Three'];
   @ViewChild(MatAutocomplete) autocomplete: MatAutocomplete;
 
-  constructor() { }
-  // startAnimationForLineChart(chart){
-  //     let seq: any, delays: any, durations: any;
-  //     seq = 0;
-  //     delays = 80;
-  //     durations = 500;
+  @Input() transactionAccount;
+  @Input() transactionAmount;
+  @Input() transactionReason;
+  @Input() transactionDate;
 
-  //     chart.on('draw', function(data) {
-  //       if(data.type === 'line' || data.type === 'area') {
-  //         data.element.animate({
-  //           d: {
-  //             begin: 600,
-  //             dur: 700,
-  //             from: data.path.clone().scale(1, 0).translate(0, data.chartRect.height()).stringify(),
-  //             to: data.path.clone().stringify(),
-  //             easing: Chartist.Svg.Easing.easeOutQuint
-  //           }
-  //         });
-  //       } else if(data.type === 'point') {
-  //             seq++;
-  //             data.element.animate({
-  //               opacity: {
-  //                 begin: seq * delays,
-  //                 dur: durations,
-  //                 from: 0,
-  //                 to: 1,
-  //                 easing: 'ease'
-  //               }
-  //             });
-  //         }
-  //     });
+  public accounts;
 
-  //     seq = 0;
-  // };
-  // startAnimationForBarChart(chart){
-  //     let seq2: any, delays2: any, durations2: any;
+  private subscription;
+  public errorMsg;
 
-  //     seq2 = 0;
-  //     delays2 = 80;
-  //     durations2 = 500;
-  //     chart.on('draw', function(data) {
-  //       if(data.type === 'bar'){
-  //           seq2++;
-  //           data.element.animate({
-  //             opacity: {
-  //               begin: seq2 * delays2,
-  //               dur: durations2,
-  //               from: 0,
-  //               to: 1,
-  //               easing: 'ease'
-  //             }
-  //           });
-  //       }
-  //     });
+  constructor(
+    private sharedData : SharedDataService,
+    private connector : ConnectorService,
+    private http : HttpClient
+  ) { }
 
-  //     seq2 = 0;
-  // };
   ngOnInit() {
-      /* ----------==========     Daily Sales Chart initialization For Documentation    ==========---------- */
+    let res = this.sharedData.getAccounts().subscribe(res => {
+      if (res !== undefined && res !== null) {
+        this.processAccounts(res);
+      }
+    });
+    this.sharedData.fetchAccounts();
+  }
 
-    //   const dataDailySalesChart: any = {
-    //       labels: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
-    //       series: [
-    //           [12, 17, 7, 17, 23, 18, 38]
-    //       ]
-    //   };
+  private processAccounts(data) {
+    this.accounts = [];
+    for (let key in data) {
+      console.log(key);
+      if (key === "banks") {
+        data["banks"].forEach(bank => {
+          let identifier = bank.name.split(" ")[0] + " " + bank.holder_name.split(" ")[0];
+          this.accounts.push({
+            identifier : identifier,
+            id : bank.id
+          });
+        });
+      }
+      if (key === "homecash") {
+        data["homecash"].forEach(hc => {
+          let identifier = hc.name.split(" ")[0] + " " + hc.current_balance;
+          this.accounts.push({
+            identifier : identifier,
+            id : hc.id
+          });
+        });
+      }
+    }
+  }
 
-    //  const optionsDailySalesChart: any = {
-    //       lineSmooth: Chartist.Interpolation.cardinal({
-    //           tension: 0
-    //       }),
-    //       low: 0,
-    //       high: 50, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-    //       chartPadding: { top: 0, right: 0, bottom: 0, left: 0},
-    //   }
+  public credit() {
+    if (this.validateTransactionField()) {
+      let params = {
+        action : "credit",
+        account : this.transactionAccount,
+        amount : this.transactionAmount,
+        reason : this.transactionReason,
+        time : this.transactionDate
+      }
+      console.log(params);
+      this.connector.postRequest(
+        "http://"+window["IP"]+"/private/api/transaction.php",
+        params
+      ).subscribe(res => {
+        if (res !== undefined && res !== null) {
+          let identifier;
+          this.accounts.forEach(element => {
+            if (element["id"] === this.transactionAccount) {
+              identifier = element["identifier"];
+            }
+          });
+          this.connector.updateToken(res);
+          if (res["status"]) {
+            $.notify({
+              icon: "notifications",
+              message: "Recorded Successfully!</br> Rs "+this.transactionAmount+" is credited to "+identifier
+          },{
+              type: "success",
+              timer: 4000,
+              placement: {
+                  from: "top",
+                  align: "right"
+              }
+          });
+            this.clearTransactionForm();
+          }
+        }
+      });
+    }
+  }
 
-    //   var dailySalesChart = new Chartist.Line('#dailySalesChart', dataDailySalesChart, optionsDailySalesChart);
+  public debit() {
+    if (this.validateTransactionField()) {
+      let params = {
+        action : "debit",
+        account : this.transactionAccount,
+        amount : this.transactionAmount,
+        reason : this.transactionReason,
+        time : this.transactionDate
+      }
+      console.log(params);
+      this.connector.postRequest(
+        "http://"+window["IP"]+"/private/api/transaction.php",
+        params
+      ).subscribe(res => {
+        if (res !== undefined && res !== null) {
+          this.connector.updateToken(res);
+          if (res["status"]) {
+            let identifier;
+            this.accounts.forEach(element => {
+              if (element["id"] === this.transactionAccount) {
+                identifier = element["identifier"];
+              }
+            });
+            $.notify({
+              icon: "notifications",
+              message: "Recorded Successfully!</br> Rs "+this.transactionAmount+" is debited from "+identifier
+          },{
+              type: "success",
+              timer: 4000,
+              placement: {
+                  from: "top",
+                  align: "right"
+              }
+          });
+            this.clearTransactionForm();
+          }
+        }
+      });
+    }
+  }
 
-    //   this.startAnimationForLineChart(dailySalesChart);
+  private clearTransactionForm() {
+    this.transactionAccount = "";
+    this.transactionAmount = "";
+    this.transactionDate = "";
+    this.transactionReason = "";
+  }
 
-
-    //   /* ----------==========     Completed Tasks Chart initialization    ==========---------- */
-
-    //   const dataCompletedTasksChart: any = {
-    //       labels: ['12p', '3p', '6p', '9p', '12p', '3a', '6a', '9a'],
-    //       series: [
-    //           [230, 750, 450, 300, 280, 240, 200, 190]
-    //       ]
-    //   };
-
-    //  const optionsCompletedTasksChart: any = {
-    //       lineSmooth: Chartist.Interpolation.cardinal({
-    //           tension: 0
-    //       }),
-    //       low: 0,
-    //       high: 1000, // creative tim: we recommend you to set the high sa the biggest value + something for a better look
-    //       chartPadding: { top: 0, right: 0, bottom: 0, left: 0}
-    //   }
-
-    //   var completedTasksChart = new Chartist.Line('#completedTasksChart', dataCompletedTasksChart, optionsCompletedTasksChart);
-
-    //   // start animation for the Completed Tasks Chart - Line Chart
-    //   this.startAnimationForLineChart(completedTasksChart);
-
-
-
-    //   /* ----------==========     Emails Subscription Chart initialization    ==========---------- */
-
-    //   var datawebsiteViewsChart = {
-    //     labels: ['J', 'F', 'M', 'A', 'M', 'J', 'J', 'A', 'S', 'O', 'N', 'D'],
-    //     series: [
-    //       [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895]
-
-    //     ]
-    //   };
-    //   var optionswebsiteViewsChart = {
-    //       axisX: {
-    //           showGrid: false
-    //       },
-    //       low: 0,
-    //       high: 1000,
-    //       chartPadding: { top: 0, right: 5, bottom: 0, left: 0}
-    //   };
-    //   var responsiveOptions: any[] = [
-    //     ['screen and (max-width: 640px)', {
-    //       seriesBarDistance: 5,
-    //       axisX: {
-    //         labelInterpolationFnc: function (value) {
-    //           return value[0];
-    //         }
-    //       }
-    //     }]
-    //   ];
-    //   var websiteViewsChart = new Chartist.Bar('#websiteViewsChart', datawebsiteViewsChart, optionswebsiteViewsChart, responsiveOptions);
-
-    //   //start animation for the Emails Subscription Chart
-    //   this.startAnimationForBarChart(websiteViewsChart);
+  private validateTransactionField() {
+    if (this.transactionAccount === "" || this.transactionAccount === undefined) {
+      this.errorMsg = "Select an account";
+      return false;
+    } else if (this.transactionDate === "" || this.transactionDate === undefined) {
+      this.errorMsg = "Select a date";
+      return false;
+    } else if (this.transactionAmount === "" || this.transactionAmount === undefined) {
+      this.errorMsg = "Amount cannot be blank";
+      return false;
+    } else if (this.transactionReason === "" || this.transactionReason === undefined) {
+      this.errorMsg = "Reason cannot be blank";
+      return false;
+    }
+    this.errorMsg = "";
+    return true;
   }
 
 }
